@@ -72,6 +72,13 @@ class PrerenderMiddleware
     private $returnSoftHttpCodes;
 
     /**
+     * Use prerender chrome browser
+     *
+     * @var boolean
+     */
+    private $prerenderChrome;
+
+    /**
      * Creates a new PrerenderMiddleware instance
      *
      * @param Application $app
@@ -98,6 +105,7 @@ class PrerenderMiddleware
         $this->prerenderToken = $config['prerender_token'];
         $this->whitelist = $config['whitelist'];
         $this->blacklist = $config['blacklist'];
+        $this->prerenderChrome = $config['enable_prerender_chrome'];
     }
 
     /**
@@ -195,12 +203,15 @@ class PrerenderMiddleware
         if ($this->prerenderToken) {
             $headers['X-Prerender-Token'] = $this->prerenderToken;
         }
+        if($this->prerenderChrome) {
+            $headers['x-prerender-browser'] = 'chrome';
+        }
     
         $protocol = $request->isSecure() ? 'https' : 'http';
     
         try {
             // Return the Guzzle Response
-        $host = $request->getHost();
+            $host = $request->getHost();
             $path = $request->Path();
             return $this->client->get($this->prerenderUri . '/' . urlencode($protocol.'://'.$host.'/'.$path), compact('headers'));
         } catch (RequestException $exception) {

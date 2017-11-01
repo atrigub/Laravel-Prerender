@@ -161,4 +161,17 @@
         'developers.google.com/+/web/snippet',
         'slackbot',
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Enable Chrome Prerender
+    |--------------------------------------------------------------------------
+    |
+    | Set this field to false to fully enable the prerender chrome browser. You
+    | would probably override this in a local configuration, to enable
+    | prerender chrome browser on your local machine.
+    |
+    */
+
+    'enable_prerender_chrome' => env('PRERENDER_CHROME', false),
 ];
