@@ -79,6 +79,13 @@ class PrerenderMiddleware
     private $prerenderChrome;
 
     /**
+     * Force use https protocol
+     *
+     * @var boolean
+     */
+    private $forceHttps;
+
+    /**
      * Creates a new PrerenderMiddleware instance
      *
      * @param Application $app
@@ -106,6 +113,7 @@ class PrerenderMiddleware
         $this->whitelist = $config['whitelist'];
         $this->blacklist = $config['blacklist'];
         $this->prerenderChrome = $config['enable_prerender_chrome'];
+        $this->forceHttps = $config['force_https'];
     }
 
     /**
@@ -207,7 +215,7 @@ class PrerenderMiddleware
             $headers['x-prerender-browser'] = 'chrome';
         }
     
-        $protocol = $request->isSecure() ? 'https' : 'http';
+        $protocol = ($request->isSecure() || $this->forceHttps) ? 'https' : 'http';
     
         try {
             // Return the Guzzle Response

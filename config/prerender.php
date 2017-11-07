@@ -174,4 +174,17 @@
     */
 
     'enable_prerender_chrome' => env('PRERENDER_CHROME', false),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Force use https protocol;
+    |--------------------------------------------------------------------------
+    |
+    | Set this field to false to disable force use https protocol. You
+    | would probably override this in a local configuration, to disable
+    | force use https protocol on your local machine.
+    |
+    */
+
+    'force_https' => env('FORCE_HTTPS', true),
 ];
