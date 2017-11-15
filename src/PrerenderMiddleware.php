@@ -220,8 +220,17 @@ class PrerenderMiddleware
         try {
             // Return the Guzzle Response
             $host = $request->getHost();
-            $path = $request->Path();
-            return $this->client->get($this->prerenderUri . '/' . urlencode($protocol.'://'.$host.'/'.$path), compact('headers'));
+            $path = rtrim($request->Path(), '/');
+            $data = $request->query();
+            if(isset($data['_escaped_fragment_'])) {
+                unset($data['_escaped_fragment_']);
+            }
+            $url = sprintf('%s://%s/%s', $protocol, $host, $path);
+            if ($data !== []) {
+                $url .= '?' . http_build_query($data);
+            }
+
+            return $this->client->get($this->prerenderUri . '/' . urlencode($url), compact('headers'));
         } catch (RequestException $exception) {
             if(!$this->returnSoftHttpCodes && !empty($exception->getResponse()) && $exception->getResponse()->getStatusCode() == 404) {
                 \App::abort(404);
